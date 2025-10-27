@@ -3,6 +3,7 @@ services:
   postgres:
     image: postgres:16
     container_name: ecomm-userservice-postgresql
+    restart: always
     environment:
       POSTGRES_DB: user_db
       POSTGRES_USER: user
