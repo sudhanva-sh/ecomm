@@ -1,0 +1,20 @@
+server:
+  port: 8084
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5435/payment_db
+    username: payment
+    password: payment
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhot:8761/eureka
+    register-with-eureka: false
+    fetch-registry: false
