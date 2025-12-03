@@ -3,8 +3,7 @@ package com.ecommerce.order_service.controller;
 
 import com.ecommerce.order_service.dto.OrderRequest;
 import com.ecommerce.order_service.dto.OrderResponse;
-import com.ecommerce.order_service.entity.Order;
-import com.ecommerce.order_service.repository.service.OrderService;
+import com.ecommerce.order_service.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,5 +30,15 @@ public class OrderController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<OrderResponse>> getOrdersByUser(@PathVariable Long userId) {
         return ResponseEntity.ok(orderService.getOrderByUser(userId));
+    }
+
+    @PostMapping("/place-and-pay")
+    public ResponseEntity<OrderResponse> placeAndPay(@RequestBody OrderRequest request) {
+        return ResponseEntity.ok(orderService.placeOrderAndPay(request));
+    }
+
+    @PostMapping("/{orderId}/pay")
+    public ResponseEntity<OrderResponse> payOrder(@PathVariable Long orderId){
+        return  ResponseEntity.ok(orderService.payExistingOrder(orderId));
     }
 }

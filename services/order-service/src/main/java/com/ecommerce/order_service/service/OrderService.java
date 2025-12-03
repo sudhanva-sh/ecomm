@@ -1,4 +1,4 @@
-package com.ecommerce.order_service.repository.service;
+package com.ecommerce.order_service.service;
 
 import com.ecommerce.order_service.dto.OrderRequest;
 import com.ecommerce.order_service.dto.OrderResponse;
@@ -9,4 +9,7 @@ public interface OrderService {
     OrderResponse placeOrder(OrderRequest orderRequest);
     OrderResponse getOrderById(Long orderId);
     List<OrderResponse> getOrderByUser(Long userId);
+    OrderResponse placeOrderAndPay(OrderRequest orderRequest);
+    OrderResponse payExistingOrder(Long orderId);
+    OrderResponse placeOrderAsync(OrderRequest request);
 }
