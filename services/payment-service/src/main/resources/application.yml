@@ -11,6 +11,13 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  cloud:
+    config:
+      enabled: false
 
   kafka:
     bootstrap-servers: localhost:9092
@@ -20,15 +27,16 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
-        spring.json.trusted.packages: "com.ecommerce.events, com.ecommerce.payment_service.dto"
+#        spring.json.type.headers: false
+#        spring.json.value.default.type: com.ecommerce.payment_service.events.OrderCreatedEvent
+        spring.json.trusted.packages: "com.ecommerce.payment_service.events,java.lang,java.util,com.ecommerce.order_service.events.OrderCreatedEvent"
     producer:
-      key-serializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-serializer: org.springframework.kafka.support.serializer.JsonDeserializer
-
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhot:8761/eureka
-    register-with-eureka: false
-    fetch-registry: false
+      defaultZone: http://localhost:8761/eureka
+#    register-with-eureka: false
+#    fetch-registry: false

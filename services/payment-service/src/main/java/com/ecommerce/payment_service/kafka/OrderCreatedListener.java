@@ -14,19 +14,19 @@ import java.util.UUID;
 @Component
 public class OrderCreatedListener {
 
-    private final KafkaTemplate<String, PaymentEvent> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
     private final PaymentRepository paymentRepository;
     private final String TOPIC = "payment.completed";
 
-    public OrderCreatedListener(KafkaTemplate<String, PaymentEvent> kafkaTemplate,
-                                PaymentRepository paymentRepository){
-        this.kafkaTemplate = kafkaTemplate;
+    public OrderCreatedListener(PaymentRepository paymentRepository,
+                                KafkaTemplate<String, Object> kafkaTemplate) {
         this.paymentRepository = paymentRepository;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     @KafkaListener(topics = "order.created",
-                    groupId = "payment-service-group")
-    public  void handleOrderEvent(OrderCreatedEvent event){
+            groupId = "payment-service-group")
+    public void handleOrderEvent(OrderCreatedEvent event) {
         Payment existing = paymentRepository.findByOrderId(event.getOrderId());
         if (existing != null) {
             // already processed — emit event if necessary or skip

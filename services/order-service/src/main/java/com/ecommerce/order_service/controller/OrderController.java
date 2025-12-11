@@ -34,7 +34,8 @@ public class OrderController {
 
     @PostMapping("/place-and-pay")
     public ResponseEntity<OrderResponse> placeAndPay(@RequestBody OrderRequest request) {
-        return ResponseEntity.ok(orderService.placeOrderAndPay(request));
+//        return ResponseEntity.ok(orderService.placeOrderAndPay(request));
+        return ResponseEntity.ok(orderService.placeOrderAsync(request));
     }
 
     @PostMapping("/{orderId}/pay")

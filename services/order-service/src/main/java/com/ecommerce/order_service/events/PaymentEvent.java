@@ -1,5 +1,6 @@
 package com.ecommerce.order_service.events;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
