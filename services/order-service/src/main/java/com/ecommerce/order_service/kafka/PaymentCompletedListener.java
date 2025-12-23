@@ -4,12 +4,15 @@ import com.ecommerce.order_service.entity.Order;
 import com.ecommerce.order_service.entity.OrderStatus;
 import com.ecommerce.order_service.events.PaymentEvent;
 import com.ecommerce.order_service.repository.OrderRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
 public class PaymentCompletedListener {
 
+    private static final Logger logger = LoggerFactory.getLogger(PaymentCompletedListener.class);
     private final OrderRepository orderRepository;
     public PaymentCompletedListener(OrderRepository orderRepository){
         this.orderRepository = orderRepository;
@@ -18,6 +21,9 @@ public class PaymentCompletedListener {
     @KafkaListener(topics = "payment.completed",
                     groupId = "order-service-group")
     public void onPaymentCompleted(PaymentEvent event){
+
+        logger.info(String.format("Received : %s", event.toString()));
+
         Order order = orderRepository.findById(event.getOrderId()).get();
 
         if("success".equalsIgnoreCase(event.getStatus())){

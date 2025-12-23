@@ -13,6 +13,8 @@ import com.ecommerce.order_service.repository.OrderItemRepository;
 import com.ecommerce.order_service.repository.OrderRepository;
 import com.ecommerce.order_service.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class OrderServiceImpl implements OrderService {
+
+
+    private static final Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
@@ -168,12 +173,15 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse placeOrderAsync(OrderRequest orderRequest){
         double totalAmount = 0;
 
+        logger.info(String.format("Received: %s", orderRequest.toString()));
+
         Order order = Order.builder()
                 .userId(orderRequest.getUserId())
                 .status(OrderStatus.CREATED)
                 .build();
         Order saved = orderRepository.save(order);
 
+        logger.info(String.format("Order created: %s", order.toString()));
         List<OrderItem> items = orderRequest.getItems().stream().map(item -> {
                     ProductResponse product = productClient.getProductById(item.getProductId());
                     return OrderItem.builder()
@@ -202,6 +210,7 @@ public class OrderServiceImpl implements OrderService {
                                 .quantity(i.getQuantity())
                                 .price(i.getPrice()).build()).toList()).build();
 
+        logger.info(String.format("Publishing Event to Payment service %s", event.toString()));
         orderEventsProducer.publishOrderCreated(event);
         return mapToResponse(saved);
     }
