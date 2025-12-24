@@ -28,10 +28,12 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "com.ecommerce.payment_service.events,java.lang,java.util,*"
-#        spring.json.type.mapping: "com.ecommerce.order_service.events.OrderCreatedEvent:com.ecommerce.payment_service.events.OrderCreatedEvent"
+        spring.json.type.mapping: "order_created:com.ecommerce.payment_service.events.OrderCreatedEvent"
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: "payment_completed:com.ecommerce.payment_service.events.PaymentEvent"
 
 
 
